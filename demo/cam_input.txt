@@ -1,0 +1,19 @@
+# 1st observation batch
+person,112233
+person,114455
+person,662255
+person,114655
+car,AA00BB
+car,AA11CC
+car,DD00CC
+car,AA12CC
+
+# sleep 10 sec in between
+zzz,10000
+
+# 2nd observation batch
+person,112233
+person,112233
+car,AA00BB
+car,AA00BB
+

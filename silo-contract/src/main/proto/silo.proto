@@ -1,0 +1,216 @@
+//
+// Protocol buffers definition for Silo server
+//
+syntax = "proto3";
+package pt.tecnico.sauron.silo.grpc;
+
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+
+/**
+ * Gossip Service Interface
+ */
+service Gossip {
+    rpc gossip(GossipRequest) returns (GossipResponse);
+}
+
+/**
+ * Gossip Messages
+ */
+message GossipRequest {
+    repeated Operation log = 1;
+    VectorTS ts = 2;
+    uint32 replicaInstance = 3;
+}
+
+message GossipResponse {
+}
+
+message Operation {
+    // Type of operation
+    Op operation = 1;
+    oneof Params {
+        CamJoinData camJoinData = 2;
+        CamReportData camReportData = 3;
+        InitData initData = 4;
+    }
+    VectorTS prev = 5;
+    VectorTS ts = 6;
+    uint32 replicaInstance = 7;
+}
+
+enum Op {
+    UNKNOWN_OP = 0;
+    CAM_JOIN = 1;
+    CAM_REPORT = 2;
+    CLEAR = 3;
+    INIT = 4;
+}
+
+message CamJoinData {
+    string name = 1;
+    Coordinates coordinates = 2;
+}
+
+message CamReportData {
+    string name = 1;
+    repeated Observation observations = 2;
+}
+
+message InitData {
+    repeated CamInfo cameras = 1;
+    repeated ObservationInfo observationInfos = 2;
+}
+
+/**
+ * Silo Service interface
+ */
+service Silo {
+    rpc cam_join(CamJoinRequest) returns (CamJoinResponse);
+    rpc cam_info(CamInfoRequest) returns (CamInfoResponse);
+    rpc cam_report(CamReportRequest) returns (CamReportResponse);
+    rpc spotter_track(SpotterTrackRequest) returns (SpotterTrackResponse);
+    rpc spotter_track_match(SpotterTrackMatchRequest) returns (SpotterTrackMatchResponse);
+    rpc spotter_trace(SpotterTraceRequest) returns (SpotterTraceResponse);
+    /* Control methods */
+    rpc ctrl_ping(PingRequest) returns (PingResponse);
+    rpc ctrl_clear(ClearRequest) returns (ClearResponse);
+    rpc ctrl_init(InitRequest) returns (InitResponse);
+}
+
+/**
+ * Update messages
+ */
+message CamJoinRequest {
+    CamInfo info  = 1;
+    VectorTS prev = 2;
+}
+
+message CamJoinResponse {
+    VectorTS updateID = 1;
+}
+
+message CamReportRequest {
+    string camName = 1;
+    repeated ObjectInfo observations = 2;
+    VectorTS prev = 3;
+}
+
+message CamReportResponse {
+    VectorTS updateID = 1;
+}
+
+message ClearRequest {
+    VectorTS prev = 1;
+}
+
+message ClearResponse {
+    VectorTS updateID = 1;
+}
+
+message InitRequest {
+    repeated CamInfo cameras = 1;
+    repeated ObservationInfo observations = 2;
+    VectorTS prev = 3;
+}
+
+message InitResponse {
+    VectorTS updateID = 1;
+}
+
+/**
+ * Query messages
+ */
+message CamInfoRequest {
+    string name = 1;
+    VectorTS prev = 2;
+}
+
+message CamInfoResponse {
+    Coordinates coordinates = 1;
+    VectorTS new = 2;
+}
+
+message SpotterTrackRequest {
+    ObjectInfo objectInfo = 1;
+    VectorTS prev = 2;
+}
+
+message SpotterTrackResponse {
+    ObservationInfo observationInfo = 1;
+    VectorTS new = 2;
+}
+
+message SpotterTrackMatchRequest {
+    ObjectType objectType = 1;
+    string regex = 2;
+    VectorTS prev = 3;
+}
+
+message SpotterTrackMatchResponse {
+    repeated ObservationInfo observationInfos = 1;
+    VectorTS new = 2;
+}
+
+message SpotterTraceRequest {
+    ObjectInfo objectInfo = 1;
+    VectorTS prev = 2;
+}
+
+message SpotterTraceResponse {
+    repeated ObservationInfo observationInfos = 1;
+    VectorTS new = 2;
+}
+
+/**
+ * Ping message
+ */
+message PingRequest {
+    string message = 1;
+}
+
+message PingResponse {
+    string message = 2;
+}
+
+/**
+ * Auxiliary messages
+ */
+message VectorTS {
+    repeated uint64 timestamp = 1;
+}
+
+message CamInfo {
+    string name = 1;
+    Coordinates coordinates = 2;
+}
+
+message Coordinates {
+    double latitude = 1;
+    double longitude = 2;
+}
+
+message ObservationInfo {
+    Observation observation = 1;
+    CamInfo camInfo = 2;
+}
+
+message Observation {
+    ObjectInfo objectInfo = 1;
+    google.protobuf.Timestamp timestamp = 2;
+}
+
+message ObjectInfo {
+    ObjectType type = 1;
+    oneof Identifier {
+        uint64 numericId = 2;
+        string alphanumericId = 3;
+    }
+}
+
+enum ObjectType {
+    UNKNOWN_TYPE = 0;
+    PERSON = 1;
+    CAR = 2;
+}
