@@ -3,31 +3,6 @@
 Distributed Systems 2019-2020, 2nd semester project
 
 
-## Authors
-
-**Group A16**
-
-### Team members
-
-| Number | Name              | User                                 | Email                                         |
-| -------|-------------------|--------------------------------------|-----------------------------------------------|
-| 89439  | Duarte Alves      | <https://github.com/DuarteMRAlves>   | <mailto:duartemalves@tecnico.ulisboa.pt>      |
-| 89453  | Guilherme Peixoto | <https://github.com/guilherme-p>     | <mailto:guilherme.peixoto@tecnico.ulisboa.pt> |
-| 89492  | Lídia Custódio    | <https://github.com/lidiagc>         | <mailto:lidiagcustodio@tecnico.ulisboa.pt>    |
-
-### Task leaders
-
-| Task set | To-Do                         | Leader              |
-| ---------|-------------------------------| --------------------|
-| core     | protocol buffers, silo-client | _(whole team)_      |
-| T1       | cam_join, cam_info, eye       | _Lídia Custódio_    |
-| T2       | report, spotter               | _Guilherme Peixoto_ |
-| T3       | track, trackMatch, trace      | _Duarte Alves_      |
-| T4       | test T1                       | _Guilherme Peixoto_ |
-| T5       | test T2                       | _Duarte Alves_      |
-| T6       | test T3                       | _Lídia Custódio_    |
-
-
 ## Getting Started
 
 The overall system is composed of multiple modules.
